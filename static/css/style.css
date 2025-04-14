@@ -1,0 +1,28 @@
+.hero-section {
+    background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center;
+    background-size: cover;
+    height: 80vh; /* Sesuaikan tinggi hero */
+    position: relative;
+  }
+  
+  .hero-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* overlay hitam transparan */
+  }
+  
+  .hero-section .container {
+    z-index: 2;
+    position: relative;
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+  }
+  

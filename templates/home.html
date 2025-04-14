@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .hero-section {
+    background-image: url("{{ url_for('static', filename='images/g.jpg') }}");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+  }
+
+  .section-light {
+    background-color: #f4ede6;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 40px 30px;
+    margin-bottom: 40px;
+  }
+
+  .section-light img {
+    border-radius: 10px;
+  }
+
+  .info-icons i {
+    color: #ffc107;
+    transition: transform 0.3s;
+  }
+
+  .info-icons i:hover {
+    transform: scale(1.2);
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section d-flex align-items-center">
+  <div class="container text-center text-white">
+    <h1 class="display-4 fw-bold">Selamat Datang di <br />Prediksi Inflasi Pendidikan</h1>
+    <p class="lead">Analisis tren ekonomi untuk masa depan pendidikan yang lebih cerah</p>
+    <a href="{{ url_for('prediksi') }}" class="btn btn-warning btn-lg mt-3 fw-bold shadow">Prediksi Sekarang</a>
+  </div>
+</div>
+
+<!-- Info Icons -->
+<div class="info-icons py-4 mb-5" style="background-color: #f4ede6;">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-6 col-md-2 text-center">
+        <i class="bi bi-graph-up-arrow fs-2"></i>
+        <p>Data Ekonomi</p>
+      </div>
+      <div class="col-6 col-md-2 text-center">
+        <i class="bi bi-cpu-fill fs-2"></i>
+        <p>Machine Learning</p>
+      </div>
+      <div class="col-6 col-md-2 text-center">
+        <i class="bi bi-bar-chart-line-fill fs-2"></i>
+        <p>Visualisasi</p>
+      </div>
+      <div class="col-6 col-md-2 text-center">
+        <i class="bi bi-book-fill fs-2"></i>
+        <p>Pendidikan</p>
+      </div>
+      <div class="col-6 col-md-2 text-center">
+        <i class="bi bi-cash-stack fs-2"></i>
+        <p>Inflasi</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Sections -->
+
+<div class="container section-light">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <img src="{{ url_for('static', filename='images/10.jpg') }}" class="img-fluid" alt="Latar Belakang">
+    </div>
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-3">Latar Belakang</h2>
+      <p>
+        Pendidikan merupakan sektor vital dalam kemajuan bangsa. Namun, kenaikan biaya pendidikan yang terus meningkat dari tahun ke tahun menjadi tantangan besar. Inflasi dalam sektor ini dapat berdampak pada aksesibilitas dan perencanaan keuangan. Oleh karena itu, prediksi inflasi pendidikan sangat penting untuk membantu berbagai pihak dalam mengambil keputusan.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container section-light">
+  <div class="row align-items-center flex-md-row-reverse">
+    <div class="col-md-6">
+      <img src="{{ url_for('static', filename='images/11.png') }}" class="img-fluid" alt="Pembahasan">
+    </div>
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-3">Pembahasan</h2>
+      <p>
+        Kenaikan biaya pendidikan dipengaruhi oleh berbagai faktor eksternal seperti IHK, inflasi umum, PDRB, dan UMR. Sayangnya, tidak semua pihak memahami data ekonomi ini. Dengan pendekatan berbasis teknologi, sistem prediksi ini menyederhanakan proses analisis dan memberikan visualisasi yang mudah dipahami.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container section-light">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <img src="{{ url_for('static', filename='images/12.png') }}" class="img-fluid" alt="Tujuan Proyek">
+    </div>
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-3">Tujuan Proyek</h2>
+      <p>
+        Website ini dikembangkan menggunakan dua model Machine Learning, yaitu Random Forest dan LSTM. Dengan memasukkan parameter ekonomi yang relevan, pengguna dapat melihat prediksi inflasi pendidikan selama 12 bulan ke depan secara visual dan informatif, membantu dalam pengambilan keputusan berbasis data.
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

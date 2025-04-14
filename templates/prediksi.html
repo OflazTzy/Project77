@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h3 class="mb-4">Form Prediksi Inflasi Pendidikan</h3>
+          <form method="POST" action="{{ url_for('prediksi') }}">
+            <div class="row">
+              <!-- Kolom Kiri -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="tahun" class="form-label">Tahun</label>
+                  <input type="number" class="form-control" id="tahun" name="tahun" required />
+                </div>
+                <div class="mb-3">
+                  <label for="bulan" class="form-label">Bulan</label>
+                  <input type="number" class="form-control" id="bulan" name="bulan" min="1" max="12" required />
+                </div>
+                <div class="mb-3">
+                  <label for="ihk" class="form-label">IHK</label>
+                  <input type="number" step="any" class="form-control" id="ihk" name="ihk" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_umum" class="form-label">Inflasi Umum</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_umum" name="inflasi_umum" required />
+                </div>
+                <div class="mb-3">
+                  <label for="pdrb_perkapita_persen" class="form-label">PDRB Perkapita (%)</label>
+                  <input type="number" step="any" class="form-control" id="pdrb_perkapita_persen" name="pdrb_perkapita_persen" required />
+                </div>
+              </div>
+
+              <!-- Kolom Kanan -->
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="umr" class="form-label">UMR</label>
+                  <input type="number" step="any" class="form-control" id="umr" name="umr" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_pendidikan" class="form-label">Inflasi Pendidikan</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_pendidikan" name="inflasi_pendidikan" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_sd" class="form-label">Inflasi SD</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_sd" name="inflasi_sd" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_menengah" class="form-label">Inflasi Menengah</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_menengah" name="inflasi_menengah" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_tinggi" class="form-label">Inflasi Tinggi</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_tinggi" name="inflasi_tinggi" required />
+                </div>
+                <div class="mb-3">
+                  <label for="inflasi_lainnya" class="form-label">Inflasi Lainnya</label>
+                  <input type="number" step="any" class="form-control" id="inflasi_lainnya" name="inflasi_lainnya" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+              <button type="submit" class="btn btn-primary me-2">Submit</button>
+              <a href="{{ url_for('prediksi') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if predictions_rf and predictions_lstm and month_labels %}
+<!-- Bagian Hasil Prediksi -->
+<div class="container my-5" id="hasil-prediksi">
+  <h3>Hasil Prediksi</h3>
+  <p>Grafik prediksi inflasi pendidikan 12 bulan ke depan menggunakan Random Forest & LSTM.</p>
+
+  <div class="card p-3 shadow-sm mb-4">
+    <canvas id="predictionChart" style="height: 400px;"></canvas>
+  </div>
+
+  <div class="alert alert-info">
+    <h5 class="fw-bold">Insight:</h5>
+    <p>
+      Berdasarkan hasil prediksi, model <strong>Random Forest</strong> dan <strong>LSTM</strong> menunjukkan tren inflasi pendidikan yang
+      cenderung {{ 'meningkat' if predictions_rf[0] < predictions_rf[-1] else 'menurun' }} dalam 12 bulan ke depan.
+    </p>
+  </div>
+
+  <div class="mb-4">
+    <button class="btn btn-success me-2" onclick="downloadPDF()">Export ke PDF</button>
+    <button class="btn btn-info text-white" onclick="downloadExcel()">Export ke Excel</button>
+  </div>
+
+  <div class="card p-3 shadow-sm">
+    <h5>Detail Prediksi:</h5>
+    <div class="table-responsive">
+      <table class="table table-striped align-middle" id="prediksi-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Bulan</th>
+            <th>Random Forest</th>
+            <th>LSTM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(predictions_rf|length) %}
+          <tr>
+            <td>{{ i+1 }}</td>
+            <td>{{ month_labels[i] }}</td>
+            <td>{{ "%.4f"|format(predictions_rf[i]) }}</td>
+            <td>{{ "%.4f"|format(predictions_lstm[i]) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CDN jsPDF & html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- SheetJS for Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+  const labels = JSON.parse('{{ month_labels | tojson | safe }}');
+  const dataRF = JSON.parse('{{ predictions_rf | tojson | safe }}');
+  const dataLSTM = JSON.parse('{{ predictions_lstm | tojson | safe }}');
+
+  const ctx = document.getElementById('predictionChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Random Forest',
+          data: dataRF,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+          tension: 0.1
+        },
+        {
+          label: 'LSTM',
+          data: dataLSTM,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          fill: true,
+          tension: 0.1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Bulan'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Prediksi Inflasi'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      }
+    }
+  });
+
+  // Export ke PDF
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const element = document.getElementById('hasil-prediksi');
+
+    await html2canvas(element, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 190;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let position = 10;
+
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+      pdf.save("hasil_prediksi_inflasi.pdf");
+    });
+  }
+
+  // Export ke Excel
+  function downloadExcel() {
+    const wb = XLSX.utils.book_new();
+    const ws_data = [
+      ['No', 'Bulan', 'Random Forest', 'LSTM']
+    ];
+    for (let i = 0; i < labels.length; i++) {
+      ws_data.push([i + 1, labels[i], dataRF[i], dataLSTM[i]]);
+    }
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, "Prediksi");
+    XLSX.writeFile(wb, "hasil_prediksi_inflasi.xlsx");
+  }
+</script>
+{% endif %}
+{% endblock %}

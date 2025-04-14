@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center my-5">
+  <div class="card shadow-lg border-0 overflow-hidden" style="max-width: 900px; border-radius: 20px;">
+    <div class="row g-0">
+      
+      <!-- Bagian Kiri: Gambar & Sosial Media -->
+      <div class="col-md-5 d-flex flex-column align-items-center justify-content-center text-center p-5" style="background: #f4ede6;">
+        <img src="{{ url_for('static', filename='images/23.jpg') }}" 
+             alt="Profile Image" 
+             class="rounded-circle border mb-3" 
+             style="width: 150px; height: 150px; object-fit: cover;">
+        <h3 class="fw-bold">Muhammad David Fawwas Olfat</h3>
+        <p class="text-muted fs-5">Mahasiswa</p>
+        <div class="d-flex justify-content-center gap-4 mt-3">
+          <a href="#" class="text-dark fs-4"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark fs-4"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-dark fs-4"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+
+      <!-- Bagian Kanan: Teks & Tombol -->
+      <div class="col-md-7 bg-white p-5">
+        <h1 class="fw-bold display-4">Hello</h1>
+        <p class="text-muted fs-5"></p>
+        <div class="d-flex gap-3 mb-4">
+          <a href="#" class="btn btn-primary btn-lg px-4">Projects</a>
+        </div>
+        <p class="fs-5">
+            Mahasiswa semester 6 dengan minat di bidang teknologi
+            terutama cyber security. Kemampuan teknis dalam teknologi informasi dan keterampilan jaringan.
+            analisis kerentanan, dan penetrasi sistem. Minat ini muncul karena kesadaran akan pentingnya perlindungan data dan sistem informasi di era digital.
+        </p>
+        <p class="fs-5">
+          
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
